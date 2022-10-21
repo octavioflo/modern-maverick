@@ -2,29 +2,34 @@
 The report types I'm expecting to create should be junit, json, and html. 
 
 """
-from abc import ABC, abstractmethod
+import datetime
+import json
 
 
-class Report(ABC):
-    @abstractmethod
-    def base_report():
-        """Builds the skeletion of the report."""
-
-
-class JSON(Report):
-    def base_report():
-        return {
+class JSON:
+    def __init__(self, test_results: list[dict[str, str]], report_name: str) -> None:
+        self.json_report = {
             "version": "0.1.0",
-            "time_created": "time_here",
-            "attack_cases": [],
+            "time_created": datetime.datetime.now().strftime("%Y-%m-%d:%H:%M:%S"),
+            "tests": [],
         }
+        for test_result in test_results:
+            self.add_results(test_result)
+        self.save_report(report_name)
+
+    def add_results(self, test_result) -> None:
+        self.json_report["tests"].append(test_result)
+
+    def save_report(self, report_name: str) -> None:
+        with open(report_name, "w") as f:
+            f.write(json.dumps(self.json_report, indent=4))
 
 
-class Junit(Report):
-    def base_report():
+class Junit:
+    def __init__(self) -> None:
         pass
 
 
-class Html(Report):
-    def base_report():
+class Html:
+    def __init__(self) -> None:
         pass
