@@ -1,0 +1,19 @@
+attack-1:
+  title: "Nmap Version"
+  description: "This test scenario to get the version of nmap."
+  tool: "nmap"
+  variables:
+    hostname: "http://127.0.0.1:80"
+  command:
+    - "nmap --version"
+  output: "Nmap version 7.93"
+
+attack-2:
+  title: "HTTPS Port Open"
+  description: "This test scenario should determine whether port 443 is open using nmap."
+  tool: "nmap"
+  variables:
+    hostname: "http://127.0.0.1:80"
+  command:
+    - "nmap -sV -p 443 scanme.nmap.org"
+  output: "https open"
