@@ -17,15 +17,14 @@ class Cli:
     def print_table(self) -> None:
         self.console.print(self.table)
 
-    def _pass_fail_result(self, test_result: bool) -> str:
-        return (
-            "[bold green]PASSED[/bold green]"
-            if test_result
-            else "[bold red]FAILED[/bold red]"
-        )
-
     def add_table_rows(
         self, test_case: str, tool: str, test_result: bool, description: str
     ) -> None:
-        result = self._pass_fail_result(test_result)
-        self.table.add_row(test_case, tool, result, description)
+        self.table.add_row(
+            test_case,
+            tool,
+            "[bold green]PASSED[/bold green]"
+            if test_result
+            else "[bold red]FAILED[/bold red]",
+            description,
+        )

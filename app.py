@@ -6,6 +6,8 @@ from tools.tool_mapper import launch_attack
 from output.cli import Cli
 from report.report import JSON
 import sys
+from time import sleep
+from rich.console import Console
 
 # import pkg_resources
 
@@ -64,22 +66,27 @@ def main():
         open_directory_files(args.directory)
 
     c = Cli()
+    console = Console()
+
     report_details = []
     attack_content = list(report_content.values())
     attacks: List[Attacks] = [Attacks(**items) for items in attack_content]
     for attack in attacks:
-        attack_output = launch_attack(attack.tool, attack.command, attack.output)
-        c.add_table_rows(
-            attack.title, attack.tool, attack_output.is_true, attack.description
-        )
-        report_details.append(
-            {
-                "test_case": attack.title,
-                "tool": attack.tool,
-                "result": "passed" if attack_output.is_true else "failed",
-                "description": attack.description,
-            }
-        )
+        with console.status("[bold blue]Working on tasks..."):
+            attack_output = launch_attack(attack.tool, attack.command, attack.output)
+            c.add_table_rows(
+                attack.title, attack.tool, attack_output.is_true, attack.description
+            )
+            report_details.append(
+                {
+                    "test_case": attack.title,
+                    "tool": attack.tool,
+                    "result": "passed" if attack_output.is_true else "failed",
+                    "description": attack.description,
+                }
+            )
+            sleep(1)
+            console.log(f"{attack.title} complete")
     c.print_table()
 
     if args.report is None:
